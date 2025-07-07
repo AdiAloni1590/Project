@@ -1,80 +1,158 @@
-<!DOCTYPE html>
-<html lang="he">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>דאשבורדים - מגה ספורט</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      background-color: #f0f0f0;
-      padding: 0;
-      margin: 0;
-    }
-    header {
-      background-color: #2c3e50;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 30px;
-    }
-    .dashboard {
-      background: white;
-      margin-bottom: 40px;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .dashboard h2 {
-      margin-top: 0;
-      font-size: 1.4em;
-    }
-    iframe {
-      width: 100%;
-      height: 600px;
-      border: none;
-      border-radius: 8px;
-    }
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
 
-    @media (max-width: 768px) {
-      .container {
-        padding: 15px;
-      }
-      iframe {
-        height: 400px;
-      }
-      .dashboard h2 {
-        font-size: 1.2em;
-      }
-    }
-  </style>
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+</script>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערכת ויזואליזציה - מגה ספורט</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .intro {
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .dashboard-button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .dashboard-button {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>דאשבורדים - מגה ספורט</h1>
-  </header>
-  <div class="container">
+    <header>
+        <h1>המערכת של עדי - ויזואליזציה לקבלת החלטות במגה ספורט</h1>
+    </header>
 
-    <div class="dashboard">
-      <h2>1. דאשבורד ניהולי</h2>
-      <iframe src="https://public.tableau.com/views/Project-_17518829425370/sheet2?:embed=y&:display_count=yes&:showVizHome=no"></iframe>
-    </div>
+    <section class="intro">
+        <p>המערכת הזו נבנתה כדי לעזור למגה ספורט לנתח נתוני מכירות, רווחיות, קטגוריות פופולריות והתנהגות לקוחות לאורך זמן. המטרה היא לאפשר קבלת החלטות טובה יותר בנוגע למלאי, אסטרטגיה ותפעול יומיומי.</p>
+    </section>
 
-    <div class="dashboard">
-      <h2>2. דאשבורד תפעולי</h2>
-      <iframe src="https://public.tableau.com/views/Project_17518828703430/sheet5?:embed=y&:display_count=yes&:showVizHome=no"></iframe>
-    </div>
+    <section class="button-container">
+        <button class="dashboard-button" onclick="window.location.href='dash1.html'">דאשבורד 1 - ניתוח ניהולי</button>
+        <button class="dashboard-button" onclick="window.location.href='dash2.html'">דאשבורד 2 - ניתוח תפעולי</button>
+        <button class="dashboard-button" onclick="window.location.href='dash3.html'">דאשבורד 3 - ניתוח אסטרטגי</button>
+    </section>
 
-    <div class="dashboard">
-      <h2>3. דאשבורד אסטרטגי</h2>
-      <iframe src="https://public.tableau.com/views/Project-_17518830155350/sheet7?:embed=y&:display_count=yes&:showVizHome=no"></iframe>
-    </div>
+    <footer>
+        <p>© 2025 מגה ספורט - ויזואליזציה וקבלת החלטות | עדי</p>
+    </footer>
 
-  </div>
+    <script>
+        document.querySelectorAll('.dashboard-button').forEach(button => {
+            button.addEventListener('click', () => {
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+    </script>
 </body>
 </html>
