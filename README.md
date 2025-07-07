@@ -18,13 +18,13 @@
       text-align: center;
     }
     .container {
-      max-width: 800px;
+      max-width: 1000px;
       margin: auto;
       padding: 30px;
     }
     .dashboard {
       background: white;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -32,17 +32,11 @@
     .dashboard h2 {
       margin-top: 0;
     }
-    .dashboard a {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #3498db;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    .dashboard a:hover {
-      background-color: #2980b9;
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -54,20 +48,17 @@
 
     <div class="dashboard">
       <h2>1. דאשבורד ניהולי</h2>
-      <p>לצפייה בדאשבורד הניהולי בטאבלו:</p>
-      <a href="https://public.tableau.com/views/Project-_17518829425370/sheet2" target="_blank">לצפייה בדאשבורד</a>
+      <iframe src="https://public.tableau.com/views/Project-_17518829425370/sheet2?:embed=y&:display_count=yes&:showVizHome=no"></iframe>
     </div>
 
     <div class="dashboard">
       <h2>2. דאשבורד תפעולי</h2>
-      <p>לצפייה בדאשבורד התפעולי בטאבלו:</p>
-      <a href="https://public.tableau.com/views/Project_17518828703430/sheet5" target="_blank">לצפייה בדאשבורד</a>
+      <iframe src="https://public.tableau.com/views/Project_17518828703430/sheet5?:embed=y&:display_count=yes&:showVizHome=no"></iframe>
     </div>
 
     <div class="dashboard">
       <h2>3. דאשבורד אסטרטגי</h2>
-      <p>לצפייה בדאשבורד האסטרטגי בטאבלו:</p>
-      <a href="https://public.tableau.com/views/Project-_17518830155350/sheet7" target="_blank">לצפייה בדאשבורד</a>
+      <iframe src="https://public.tableau.com/views/Project-_17518830155350/sheet7?:embed=y&:display_count=yes&:showVizHome=no"></iframe>
     </div>
 
   </div>
