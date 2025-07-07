@@ -2,6 +2,7 @@
 <html lang="he">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>דאשבורדים - מגה ספורט</title>
   <style>
     body {
@@ -31,12 +32,25 @@
     }
     .dashboard h2 {
       margin-top: 0;
+      font-size: 1.4em;
     }
     iframe {
       width: 100%;
       height: 600px;
       border: none;
       border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      iframe {
+        height: 400px;
+      }
+      .dashboard h2 {
+        font-size: 1.2em;
+      }
     }
   </style>
 </head>
